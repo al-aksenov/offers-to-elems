@@ -6,15 +6,15 @@ CModule::IncludeModule("iblock");
 CModule::IncludeModule("file");
 ini_set("max_execution_time", "600");
 
-// массив с данными сайта
+// РјР°СЃСЃРёРІ СЃ РґР°РЅРЅС‹РјРё СЃР°Р№С‚Р°
 $dataAr = Array (
-	"IBLOCK_ID" 	=> 3,    			//ID инфоблока с товарами 
-	"CATALOG_TYPE" 	=> 3, 				//код товаров типа "Товар с торговыми предложениями"
-	"IBLOCK_ID_SKU" => 10,    			//ID инфоблока с торговыми предложениями
-	"PROPERTY_STR"	=> ["ARTNUMBER"],	//Массив имен строковых свойств, переносимых
-										//из торговых предложений
-	"PROPERTY_LIST"	=> ["COLOR", 		//Массив имен свойств типа "Спсиок", переносимых
-						"SIZE"],		//из торговых предложений								
+	"IBLOCK_ID" 	=> 3,    		//ID РёРЅС„РѕР±Р»РѕРєР° СЃ С‚РѕРІР°СЂР°РјРё 
+	"CATALOG_TYPE" 	=> 3, 			//РєРѕРґ С‚РѕРІР°СЂРѕРІ С‚РёРїР° "РўРѕРІР°СЂ СЃ С‚РѕСЂРіРѕРІС‹РјРё РїСЂРµРґР»РѕР¶РµРЅРёСЏРјРё"
+	"IBLOCK_ID_SKU" => 10,    		//ID РёРЅС„РѕР±Р»РѕРєР° СЃ С‚РѕСЂРіРѕРІС‹РјРё РїСЂРµРґР»РѕР¶РµРЅРёСЏРјРё
+	"PROPERTY_STR"	=> ["ARTNUMBER"],	//РњР°СЃСЃРёРІ РёРјРµРЅ СЃС‚СЂРѕРєРѕРІС‹С… СЃРІРѕР№СЃС‚РІ, РїРµСЂРµРЅРѕСЃРёРјС‹С…
+						//РёР· С‚РѕСЂРіРѕРІС‹С… РїСЂРµРґР»РѕР¶РµРЅРёР№
+	"PROPERTY_LIST"	=> ["COLOR", "SIZE"], 	//РњР°СЃСЃРёРІ РёРјРµРЅ СЃРІРѕР№СЃС‚РІ С‚РёРїР° "РЎРїСЃРёРѕРє", РїРµСЂРµРЅРѕСЃРёРјС‹С…
+						//РёР· С‚РѕСЂРіРѕРІС‹С… РїСЂРµРґР»РѕР¶РµРЅРёР№								
 );
 
 $arFilter = Array (
@@ -30,7 +30,7 @@ while($ob = $res->GetNextElement()){
 	$arPropsCurrent = $ob->GetProperties();
 	$currentID = $arFieldsCurrent["ID"];
 	
-	//массив полей для нового элемента
+	//РјР°СЃСЃРёРІ РїРѕР»РµР№ РґР»СЏ РЅРѕРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
 	$arFieldsNew = Array(
 		"IBLOCK_SECTION_ID" => $arFieldsCurrent["IBLOCK_SECTION_ID"],
 		"IBLOCK_ID"      	=> $dataAr["IBLOCK_ID"],
@@ -41,47 +41,47 @@ while($ob = $res->GetNextElement()){
 		"DETAIL_TEXT_TYPE" 	=> "html",
     );
 	
-	//массив свойств для нового элемента
+	//РјР°СЃСЃРёРІ СЃРІРѕР№СЃС‚РІ РґР»СЏ РЅРѕРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
 	$arPropsNew = Array();
 	foreach ($arPropsCurrent as $key => $value) {
-		// если свойство установлено, скопируем данные для нового элемента в массив $arPropsNew 
+		// РµСЃР»Рё СЃРІРѕР№СЃС‚РІРѕ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ, СЃРєРѕРїРёСЂСѓРµРј РґР°РЅРЅС‹Рµ РґР»СЏ РЅРѕРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РІ РјР°СЃСЃРёРІ $arPropsNew 
 		if ($value['VALUE']) {
-			// $arPropsNew[$key] для свойства типа "Список" ..
+			// $arPropsNew[$key] РґР»СЏ СЃРІРѕР№СЃС‚РІР° С‚РёРїР° "РЎРїРёСЃРѕРє" ..
 			if ($value['PROPERTY_TYPE'] == 'L'){
-				// ... не множественного выбора
+				// ... РЅРµ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРіРѕ РІС‹Р±РѕСЂР°
 				if ($value['MULTIPLE'] == 'N') {
 					$arPropsNew[$key] = Array("VALUE" => $value["VALUE_ENUM_ID"]);
 				}
-				// ... множественного выбора
+				// ... РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРіРѕ РІС‹Р±РѕСЂР°
 				if ($value['MULTIPLE'] == 'Y') {
 					$arPropsNew[$key] = $value["VALUE_ENUM_ID"];
 				}
 			}
-			// $arPropsNew[$key] для свойства с галереей изображений
+			// $arPropsNew[$key] РґР»СЏ СЃРІРѕР№СЃС‚РІР° СЃ РіР°Р»РµСЂРµРµР№ РёР·РѕР±СЂР°Р¶РµРЅРёР№
 			elseif ($key == 'MORE_PHOTO') {
-				continue; 	// для создания не связанных между собой файлов 
-							// с изображениями для каждого нового товара
-							// будем задавать заново для каждого нового товара
-							// в цикле по $offers
+				continue; 	// РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РЅРµ СЃРІСЏР·Р°РЅРЅС‹С… РјРµР¶РґСѓ СЃРѕР±РѕР№ С„Р°Р№Р»РѕРІ 
+							// СЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏРјРё РґР»СЏ РєР°Р¶РґРѕРіРѕ РЅРѕРІРѕРіРѕ С‚РѕРІР°СЂР°
+							// Р±СѓРґРµРј Р·Р°РґР°РІР°С‚СЊ Р·Р°РЅРѕРІРѕ РґР»СЏ РєР°Р¶РґРѕРіРѕ РЅРѕРІРѕРіРѕ С‚РѕРІР°СЂР°
+							// РІ С†РёРєР»Рµ РїРѕ $offers
 			}
-			// $arPropsNew[$key] для остальных свойств
+			// $arPropsNew[$key] РґР»СЏ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃРІРѕР№СЃС‚РІ
 			else {
 				$arPropsNew[$key] = $value['VALUE'];
 			}
 		}
 	}
 		
-	//получаем массив ID Торговых предложений у текущего элемента (товара)
+	//РїРѕР»СѓС‡Р°РµРј РјР°СЃСЃРёРІ ID РўРѕСЂРіРѕРІС‹С… РїСЂРµРґР»РѕР¶РµРЅРёР№ Сѓ С‚РµРєСѓС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р° (С‚РѕРІР°СЂР°)
 	$offers = CCatalogSKU::getOffersList([$currentID], $dataAr["IBLOCK_ID"])[$currentID];
 	foreach ($offers as $keyOffers => $valueOffers) {
 		
-		// копируем файлы из галереи изображений текущего элемента (товара)
+		// РєРѕРїРёСЂСѓРµРј С„Р°Р№Р»С‹ РёР· РіР°Р»РµСЂРµРё РёР·РѕР±СЂР°Р¶РµРЅРёР№ С‚РµРєСѓС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р° (С‚РѕРІР°СЂР°)
 		$arPropsNew = Array();
 		foreach ($arPropsCurrent as $key => $value) {
 			if ($value['VALUE'] and $key == 'MORE_PHOTO') {
 				$arPropsNew[$key] = Array();
 				foreach($value['VALUE'] as $numF => $currentFotoID) {
-					// заполняем массив $arPropsNew['MORE_PHOTO'] картинками, скопированными из товара
+					// Р·Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ $arPropsNew['MORE_PHOTO'] РєР°СЂС‚РёРЅРєР°РјРё, СЃРєРѕРїРёСЂРѕРІР°РЅРЅС‹РјРё РёР· С‚РѕРІР°СЂР°
 					$arPropsNew[$key]["n{$numF}"] =  Array(
 						"VALUE" => CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . CFile::GetFileArray($currentFotoID)["SRC"])
 					);
@@ -89,7 +89,7 @@ while($ob = $res->GetNextElement()){
 			}
 		}
 		
-		// копируем имя, активность и свойства текущего торгового предложения
+		// РєРѕРїРёСЂСѓРµРј РёРјСЏ, Р°РєС‚РёРІРЅРѕСЃС‚СЊ Рё СЃРІРѕР№СЃС‚РІР° С‚РµРєСѓС‰РµРіРѕ С‚РѕСЂРіРѕРІРѕРіРѕ РїСЂРµРґР»РѕР¶РµРЅРёСЏ
 		$resOffer = CIBlockElement::GetList(Array(), Array (
 			"IBLOCK_ID" => $dataAr["IBLOCK_ID_SKU"],
 			"ID" => $keyOffers,
@@ -99,7 +99,7 @@ while($ob = $res->GetNextElement()){
 			
 			$arFieldsOffer = $obOffer->GetFields();
 			$newName = $arFieldsOffer["~NAME"];
-			$newАсtivity = $arFieldsOffer['ACTIVE'];
+			$newРђСЃtivity = $arFieldsOffer['ACTIVE'];
 
 			foreach ($dataAr["PROPERTY_STR"] as $prop) {
 				$art = $obOffer->GetProperty($prop)["VALUE"];
@@ -127,11 +127,11 @@ while($ob = $res->GetNextElement()){
 			}
 			$arFieldsNew["NAME"] = $newName;
 			$arFieldsNew["CODE"] = Cutil::translit($newName,"ru",array());
-			$arFieldsNew["ACTIVE"] = $newАсtivity;			
+			$arFieldsNew["ACTIVE"] = $newРђСЃtivity;			
 		}
 		$arFieldsNew["PROPERTY_VALUES"] = $arPropsNew;
 				
-		//создаем новый элемент
+		//СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚
 		$el = new CIBlockElement;
 		if($newID = $el->Add($arFieldsNew)) {
 			echo 'New ID: ' . $newID . '<br>';
@@ -147,7 +147,7 @@ while($ob = $res->GetNextElement()){
 			}
 		}
 		
-		// добавляем к созданному элементу детальную картинку и картинку анонса
+		// РґРѕР±Р°РІР»СЏРµРј Рє СЃРѕР·РґР°РЅРЅРѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ РґРµС‚Р°Р»СЊРЅСѓСЋ РєР°СЂС‚РёРЅРєСѓ Рё РєР°СЂС‚РёРЅРєСѓ Р°РЅРѕРЅСЃР°
 		if($arFieldsCurrent["DETAIL_PICTURE"]){
 			$arNewDetPicFields['DETAIL_PICTURE'] = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . CFile::GetFileArray($arFieldsCurrent["DETAIL_PICTURE"])["SRC"]);
 			$el->Update($newID, $arNewDetPicFields);
@@ -157,7 +157,7 @@ while($ob = $res->GetNextElement()){
 			$el->Update($newID, $arNewPrePicFields);
 		}
 					
-		//Привязываем новый элемент ко всем разделам, к которым привязан текущий элемент 
+		//РџСЂРёРІСЏР·С‹РІР°РµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚ РєРѕ РІСЃРµРј СЂР°Р·РґРµР»Р°Рј, Рє РєРѕС‚РѕСЂС‹Рј РїСЂРёРІСЏР·Р°РЅ С‚РµРєСѓС‰РёР№ СЌР»РµРјРµРЅС‚ 
 		$binded = CIBlockElement::GetElementGroups($currentID);
 		$ar_new_groups = Array();
 		while($arBinded = $binded->Fetch()) {
@@ -166,7 +166,7 @@ while($ob = $res->GetNextElement()){
 		CIBlockElement::SetElementSection($newID, $ar_new_groups);
 		\Bitrix\Iblock\PropertyIndex\Manager::updateElementIndex(3, $newID);
 		
-		//УСТАНАВЛИВАЕМ КОЛИЧЕСТВО И ЦЕНУ
+		//РЈРЎРўРђРќРђР’Р›РР’РђР•Рњ РљРћР›РР§Р•РЎРўР’Рћ Р Р¦Р•РќРЈ
 		$arFieldsCat = array(
 			"ID" 		=> $newID,
 			"QUANTITY" 	=> CCatalogProduct::GetByID($keyOffers)["QUANTITY"],
@@ -176,7 +176,7 @@ while($ob = $res->GetNextElement()){
 		
 		if(CCatalogProduct::Add($arFieldsCat))
 		{
-			echo "Добавили параметры товара к элементу каталога " . $newID . '<br>';
+			echo "Р”РѕР±Р°РІРёР»Рё РїР°СЂР°РјРµС‚СЂС‹ С‚РѕРІР°СЂР° Рє СЌР»РµРјРµРЅС‚Сѓ РєР°С‚Р°Р»РѕРіР° " . $newID . '<br>';
 			 
 			$arFieldsPrice = Array(
 				"PRODUCT_ID" => $newID,
@@ -187,7 +187,7 @@ while($ob = $res->GetNextElement()){
 			CPrice::Add($arFieldsPrice);
 		  }
 		else
-			echo 'Ошибка добавления параметров товара<br>';
+			echo 'РћС€РёР±РєР° РґРѕР±Р°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ С‚РѕРІР°СЂР°<br>';
 		}
 }
 echo 'Finish';
